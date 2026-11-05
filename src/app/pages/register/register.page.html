@@ -1,0 +1,77 @@
+<ion-content class="ion-padding">
+  <div class="register-container">
+    <div class="register-header">
+      <h1>Create Account</h1>
+      <p>Join MovieApp and discover your favorite movies</p>
+    </div>
+
+    <div class="register-form">
+      <ion-input
+        label="First Name"
+        labelPlacement="floating"
+        type="text"
+        placeholder="Enter your first name"
+        [(ngModel)]="firstName"
+      ></ion-input>
+
+      <ion-input
+        label="Last Name"
+        labelPlacement="floating"
+        type="text"
+        placeholder="Enter your last name"
+        [(ngModel)]="lastName"
+      ></ion-input>
+
+      <ion-input
+        label="Age"
+        labelPlacement="floating"
+        type="number"
+        placeholder="Enter your age"
+        [(ngModel)]="age"
+      ></ion-input>
+
+      <ion-input
+        label="Email"
+        labelPlacement="floating"
+        type="email"
+        placeholder="Enter your email"
+        [(ngModel)]="email"
+      ></ion-input>
+
+      <ion-input
+        label="Password"
+        labelPlacement="floating"
+        type="password"
+        placeholder="Enter your password"
+        [(ngModel)]="password"
+      ></ion-input>
+
+      <div class="photo-section">
+        <p>Profile Photo</p>
+
+        <ion-button expand="block" fill="outline" (click)="takePicture()">
+          <ion-icon name="camera-outline" slot="start"></ion-icon>
+          Take a Photo
+        </ion-button>
+
+        <img
+          *ngIf="photo"
+          [src]="photo"
+          alt="Profile photo"
+          class="profile-preview"
+        />
+      </div>
+
+      <ion-button expand="block" (click)="register()">
+        Create Account
+      </ion-button>
+
+      <div class="login-link">
+        <p>
+          Already have an account?
+          <a routerLink="/login">Sign In</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,3 @@
+### run the project
+- ionic cap run android -l --external
+- npm run build

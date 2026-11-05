@@ -1,0 +1,15 @@
+Bonjour à tous,
+
+Le mini-projet Ionic que vous devez faire consiste en une application de gestion des films (vous pouvez utiliser le public API MovieDB pour avoir une base de départ).
+
+    Chaque utilisateur peut s'inscrire (nom, prénom, age et une photo prise via la caméra du téléphone), s'authentifier et créer sa propre playlist de ses films favoris (préférés).
+    L'administrateur peut ajouter des films à votre base de départ, et désactiver un utilisateur (et pas le supprimer).
+    Vos données seront stockées dans Firebase (Realtime DB ou Firestore) ou dans un API (si vous en avez déjà un prêt).
+    Enfin, votre application doit avoir une fonctionnalité de matching qui permet à un utilisateur de voir quels sont les utilisateurs qui ont les mêmes préférences. La fonction de matching ne doit pas reposer uniquement sur les films favoris des utilisateurs, mais aussi sur le genre de films favoris, les acteurs qui y jouent, l'année de sortie de ces films, etc.... Le taux de correspondance entre les listes des favoris doit dépasser 75%.
+
+
+Vous êtes libre de choisir entre Javascript, Angular, React ou Vue, avec Ionic.
+
+La validation se déroulera au cours de la dernière séance de cours inchallah.
+
+Bonne soirée.
