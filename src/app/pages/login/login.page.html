@@ -1,9 +1,13 @@
 <ion-content class="ion-padding">
   <div class="login-container">
     <div class="login-header">
-      <h1 routerLink="/home" style="cursor: pointer;">Welcome Back</h1>
+      <h1 routerLink="/home" style="cursor: pointer">Welcome Back</h1>
       <p>Sign in to continue to MovieApp</p>
     </div>
+
+    @if (errorMessage) {
+    <div class="error-message">{{ errorMessage }}</div>
+    }
 
     <div class="login-form">
       <ion-input
@@ -11,7 +15,7 @@
         labelPlacement="floating"
         type="email"
         placeholder="Enter your email"
-        (ionInput)="email = $any($event).detail.value ?? ''"
+        [(ngModel)]="email"
       ></ion-input>
 
       <ion-input
@@ -19,10 +23,13 @@
         labelPlacement="floating"
         type="password"
         placeholder="Enter your password"
-        (ionInput)="password = $any($event).detail.value ?? ''"
+        [(ngModel)]="password"
       ></ion-input>
 
-      <ion-button expand="block" (click)="login()"> Login </ion-button>
+      <ion-button expand="block" (click)="login()" [disabled]="isLoading">
+        {{ isLoading ? "Signing in..." : "Login" }}
+      </ion-button>
+
       <div class="register-link">
         <p>
           Don't have an account?

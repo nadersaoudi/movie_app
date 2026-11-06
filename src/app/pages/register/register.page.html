@@ -5,6 +5,10 @@
       <p>Join MovieApp and discover your favorite movies</p>
     </div>
 
+    @if (errorMessage) {
+    <div class="error-message">{{ errorMessage }}</div>
+    }
+
     <div class="register-form">
       <ion-input
         label="First Name"
@@ -47,23 +51,25 @@
       ></ion-input>
 
       <div class="photo-section">
-        <p>Profile Photo</p>
+        <p>Profile Photo (optional)</p>
 
         <ion-button expand="block" fill="outline" (click)="takePicture()">
           <ion-icon name="camera-outline" slot="start"></ion-icon>
           Take a Photo
         </ion-button>
 
-        <img
-          *ngIf="photo"
-          [src]="photo"
-          alt="Profile photo"
-          class="profile-preview"
-        />
+        <ion-button expand="block" fill="outline" (click)="pickFromGallery()">
+          <ion-icon name="image-outline" slot="start"></ion-icon>
+          Choose from Gallery
+        </ion-button>
+
+        @if (photo) {
+        <img [src]="photo" alt="Profile photo" class="profile-preview" />
+        }
       </div>
 
-      <ion-button expand="block" (click)="register()">
-        Create Account
+      <ion-button expand="block" (click)="register()" [disabled]="isLoading">
+        {{ isLoading ? "Creating account..." : "Create Account" }}
       </ion-button>
 
       <div class="login-link">

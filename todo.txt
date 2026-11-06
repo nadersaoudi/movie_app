@@ -13,3 +13,13 @@ Vous êtes libre de choisir entre Javascript, Angular, React ou Vue, avec Ionic.
 La validation se déroulera au cours de la dernière séance de cours inchallah.
 
 Bonne soirée.
+
+
+ERROR ɵNotFound: NG0201: No provider found for `InjectionToken angularfire2.app.options`. Source: Standalone[_LoginPage]. Path: _AuthService -> AngularFireAuth -> InjectionToken angularfire2.app.options. Find more at https://v22.angular.dev/errors/NG0201
+(anonymous)	@	host-console-events-document-start.js:1
+Promise.then
+(anonymous)	@	main.ts:25
+
+
+host-console-events-document-start.js:1 ERROR RuntimeError: NG0200: Circular dependency detected for `_AuthService`. Source: Standalone[_LoginPage]. Find more at https://v22.angular.dev/errors/NG0200
+(anonymous)	@	host-console-events-document-start.js:1

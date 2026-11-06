@@ -1,20 +1,21 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { environment } from "../../environments/environment";
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import type { Observable } from 'rxjs';
+
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class TmdbService {
   private readonly apiUrl = environment.tmdbBaseUrl;
 
   private readonly headers = {
     Authorization: `Bearer ${environment.tmdbToken}`,
-    accept: "application/json",
+    accept: 'application/json',
   };
 
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   getPopularMovies(): Observable<any> {
     return this.http.get(`${this.apiUrl}/movie/popular`, {
@@ -31,6 +32,12 @@ export class TmdbService {
 
   getTrendingMovies(): Observable<any> {
     return this.http.get(`${this.apiUrl}/trending/movie/week`, {
+      headers: this.headers,
+    });
+  }
+
+  getMovieDetails(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/movie/${id}`, {
       headers: this.headers,
     });
   }
