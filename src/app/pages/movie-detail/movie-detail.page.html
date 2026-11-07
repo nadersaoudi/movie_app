@@ -1,74 +1,91 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home" icon="arrow-back-outline"></ion-back-button>
+      <ion-back-button defaultHref="/movies" icon="arrow-back-outline" color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ movie()?.title || 'Movie Details' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
   @if (errorMessage()) {
-  <div class="error-message" style="text-align: center; margin-top: 2rem">
-    {{ errorMessage() }}
-    <ion-button fill="outline" (click)="goBack()" style="margin-top: 1rem">Back</ion-button>
-  </div>
+  <div class="error-message ion-padding">{{ errorMessage() }}</div>
   } @else if (isLoading()) {
-  <div class="loading" style="justify-content: center; align-items: center; height: 200px">
+  <div class="loading">
     <ion-spinner name="crescent"></ion-spinner>
   </div>
   } @else if (movie(); as m) {
-  <div class="detail-container">
-    <div class="detail-image">
-      <ion-img [src]="getImageUrl(m.backdrop_path, true)" [alt]="m.title"></ion-img>
+  <img class="backdrop" [src]="m.backdrop" [alt]="m.title" />
+
+  <div class="ion-padding">
+    <h1>{{ m.title }}</h1>
+
+    <div class="detail-meta">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <span>{{ m.releaseDate || '—' }}</span>
+      @if (m.runtime) {
+      <ion-icon name="time-outline"></ion-icon>
+      <span>{{ m.runtime }} min</span>
+      }
+      <ion-icon name="star-outline"></ion-icon>
+      <span>{{ m.voteAverage.toFixed(1) }} / 10</span>
     </div>
 
-    <div class="detail-content">
-      <div class="detail-header">
-        <h1>{{ m.title }}</h1>
-        <div class="detail-meta">
-          <ion-icon name="calendar-outline" size="small"></ion-icon>
-          <span>{{ m.release_date }}</span>
-          <ion-icon name="film-outline" size="small"></ion-icon>
-          <span>{{ m.runtime }} min</span>
-          <ion-icon name="star-outline" size="small"></ion-icon>
-          <span>{{ formatVoteAverage() }} / 10</span>
-        </div>
-        <div class="detail-genres">{{ formatGenres() }}</div>
-      </div>
+    @if (m.genres.length) {
+    <div class="chips">
+      @for (genre of m.genres; track genre) {
+      <span class="chip">{{ genre }}</span>
+      }
+    </div>
+    } @if (isLoggedIn()) {
+    <ion-button expand="block" [color]="isFavorite() ? 'medium' : 'primary'" (click)="toggleFavorite()">
+      <ion-icon slot="start" [name]="isFavorite() ? 'heart' : 'heart-outline'"></ion-icon>
+      {{ isFavorite() ? 'Remove from Favorites' : 'Add to Favorites' }}
+    </ion-button>
+    } @else {
+    <ion-button expand="block" fill="outline" routerLink="/login">Login to add favorites</ion-button>
+    } @if (m.tagline) {
+    <p class="tagline"><em>{{ m.tagline }}</em></p>
+    }
 
-      @if (m.tagline) {
-      <div class="detail-tagline">
-        <em>{{ m.tagline }}</em>
+    <h3>Overview</h3>
+    <p class="overview">{{ m.overview || 'No overview available.' }}</p>
+
+    @if (m.actors.length) {
+    <h3>Cast</h3>
+    <div class="chips">
+      @for (actor of m.actors; track actor) {
+      <span class="chip">{{ actor }}</span>
+      }
+    </div>
+    }
+
+    <div class="detail-stats">
+      @if (m.budget) {
+      <div class="stat">
+        <ion-icon name="cash-outline"></ion-icon>
+        <span class="stat-label">Budget</span>
+        <span class="stat-value">{{ m.budget | currency: 'USD' : 'symbol-narrow' : '1.0-0' }}</span>
+      </div>
+      } @if (m.revenue) {
+      <div class="stat">
+        <ion-icon name="cash-outline"></ion-icon>
+        <span class="stat-label">Revenue</span>
+        <span class="stat-value">{{ m.revenue | currency: 'USD' : 'symbol-narrow' : '1.0-0' }}</span>
+      </div>
+      } @if (m.popularity !== null) {
+      <div class="stat">
+        <ion-icon name="trending-up-outline"></ion-icon>
+        <span class="stat-label">Popularity</span>
+        <span class="stat-value">{{ m.popularity!.toFixed(1) }}</span>
+      </div>
+      } @if (m.runtime) {
+      <div class="stat">
+        <ion-icon name="film-outline"></ion-icon>
+        <span class="stat-label">Runtime</span>
+        <span class="stat-value">{{ m.runtime }} min</span>
       </div>
       }
-
-      <div class="detail-overview">
-        <h3>Overview</h3>
-        <p>{{ m.overview }}</p>
-      </div>
-
-      <div class="detail-stats" style="margin-top: 2rem">
-        <div class="stat">
-          <span class="stat-label">Budget</span>
-          <span class="stat-value">{{ m.budget | currency:'USD':'symbol-narrow':'1.0-0' }}</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">Revenue</span>
-          <span class="stat-value">{{ m.revenue | currency:'USD':'symbol-narrow':'1.0-0' }}</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">Popularity</span>
-          <span class="stat-value">{{ m.popularity.toFixed(1) }}</span>
-        </div>
-      </div>
-
-      <div class="detail-actions" style="margin-top: 2rem">
-        <ion-button expand="block" fill="clear" (click)="goBack()">
-          <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
-          Back to Movies
-        </ion-button>
-      </div>
     </div>
   </div>
   }

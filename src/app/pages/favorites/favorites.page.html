@@ -1,0 +1,38 @@
+<app-header title="My Favorites"></app-header>
+
+<ion-content class="ion-padding">
+  @if (!isLoggedIn()) {
+  <div class="empty-state">
+    <ion-icon name="heart-outline"></ion-icon>
+    <p>Login to see your favorite movies.</p>
+    <ion-button routerLink="/login">Login</ion-button>
+  </div>
+  } @else if (isLoading()) {
+  <div class="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  } @else if (!favorites().length) {
+  <div class="empty-state">
+    <ion-icon name="heart-outline"></ion-icon>
+    <p>No favorites yet. Add movies from their detail page.</p>
+    <ion-button routerLink="/movies">Browse Movies</ion-button>
+  </div>
+  } @else {
+  <ion-list lines="none">
+    @for (favorite of favorites(); track favorite.movieId) {
+    <ion-item button routerLink="/movie/{{ favorite.movieId }}" class="fav-item">
+      <ion-thumbnail slot="start">
+        <img [src]="posterUrl(favorite.poster_path)" [alt]="favorite.title" loading="lazy" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ favorite.title }}</h2>
+        <p>{{ favorite.release_date }}</p>
+      </ion-label>
+      <ion-button slot="end" fill="clear" color="danger" (click)="$event.stopPropagation(); remove(favorite)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+    }
+  </ion-list>
+  }
+</ion-content>

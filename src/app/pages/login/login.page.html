@@ -5,8 +5,8 @@
       <p>Sign in to continue to MovieApp</p>
     </div>
 
-    @if (errorMessage) {
-    <div class="error-message">{{ errorMessage }}</div>
+    @if (errorMessage()) {
+    <div class="error-message">{{ errorMessage() }}</div>
     }
 
     <div class="login-form">
@@ -26,8 +26,8 @@
         [(ngModel)]="password"
       ></ion-input>
 
-      <ion-button expand="block" (click)="login()" [disabled]="isLoading">
-        {{ isLoading ? "Signing in..." : "Login" }}
+      <ion-button expand="block" (click)="login()" [disabled]="isLoading()">
+        {{ isLoading() ? "Signing in..." : "Login" }}
       </ion-button>
 
       <div class="register-link">

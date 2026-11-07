@@ -43,20 +43,8 @@ ion-content {
   flex-direction: column;
   gap: 16px;
 
-  ion-input {
-    --background: #ffffff;
-    --padding-start: 14px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  }
-
   ion-button {
     margin-top: 8px;
-    height: 52px;
-    font-weight: 700;
-    font-size: 16px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 }
 

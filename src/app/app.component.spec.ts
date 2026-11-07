@@ -1,13 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 
 import { AppComponent } from './app.component';
+import { AdminService } from './services/admin.service';
+import { AuthService } from './services/auth.service';
 
 describe('AppComponent', () => {
   it('should create the app', async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        { provide: AuthService, useValue: { authState$: of(null), logout: () => Promise.resolve() } },
+        { provide: AdminService, useValue: { seedAdminAccount: () => Promise.resolve() } },
+      ],
     }).compileComponents();
 
     const fixture = TestBed.createComponent(AppComponent);

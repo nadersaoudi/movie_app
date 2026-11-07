@@ -1,100 +1,101 @@
 import { CommonModule } from '@angular/common';
-import type { OnDestroy, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular/lazy';
-import { Subscription } from 'rxjs';
+import { RouterLink } from '@angular/router';
+import {
+  IonButton,
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonRow,
+  IonSearchbar,
+  IonSpinner,
+} from '@ionic/angular';
+import type { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../environments/environment';
+import { AppHeaderComponent } from '../components/app-header/app-header.component';
 import type { Movie, MovieResponse } from '../models/movie.model';
-import type { User } from '../models/user.model';
-import { AuthService } from '../services/auth.service';
 import { TmdbService } from '../services/tmdb.service';
+import { NO_IMAGE } from '../utils/image.util';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    AppHeaderComponent,
+    IonButton,
+    IonCard,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonCol,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonSearchbar,
+    IonSpinner,
+  ],
 })
-export class HomePage implements OnInit, OnDestroy {
-  readonly imageUrl = environment.tmdbImageUrl;
+export class HomePage implements OnInit {
+  readonly imageUrl = environment.tmdbImageSmallUrl;
+  readonly noImage = NO_IMAGE;
   readonly movies = signal<Movie[]>([]);
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
   searchQuery = '';
 
   private readonly tmdbService = inject(TmdbService);
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-
-  readonly currentUser = signal<User | null>(null);
-  readonly isProfileMenuOpen = signal(false);
-  private authSub = new Subscription();
 
   ngOnInit(): void {
     this.loadPopularMovies();
-    this.authSub = this.authService.authState$.subscribe((firebaseUser) => {
-      if (!firebaseUser) {
-        this.currentUser.set(null);
-        return;
-      }
-      this.authService.getUserProfile(firebaseUser.uid).then((user) => {
-        this.currentUser.set(user ?? null);
-      });
-    });
   }
 
-  ngOnDestroy(): void {
-    this.authSub.unsubscribe();
-  }
-
-  loadPopularMovies(): void {
+  async loadPopularMovies(): Promise<void> {
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.searchQuery = '';
 
-    this.tmdbService.getPopularMovies().subscribe({
-      next: (response: MovieResponse) => {
-        this.movies.set(response.results ?? []);
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.errorMessage.set('Unable to load movies.');
-        this.isLoading.set(false);
-      },
-    });
+    try {
+      const response = await firstValueFrom(this.tmdbService.getPopularMovies() as Observable<MovieResponse>);
+      this.movies.set(response.results ?? []);
+    } catch {
+      this.errorMessage.set('Unable to load movies.');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
-  onSearch(event: CustomEvent): void {
+  async onSearch(event: CustomEvent): Promise<void> {
     const query = (event.detail.value ?? '').trim();
     this.searchQuery = query;
 
     if (!query) {
-      this.loadPopularMovies();
+      await this.loadPopularMovies();
       return;
     }
 
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.tmdbService.searchMovies(query).subscribe({
-      next: (response: MovieResponse) => {
-        this.movies.set(response.results ?? []);
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.errorMessage.set('Unable to search movies.');
-        this.isLoading.set(false);
-      },
-    });
-  }
-  async logout(): Promise<void> {
-    await this.authService.logout();
-    this.currentUser.set(null);
-    this.isProfileMenuOpen.set(false);
-    await this.router.navigate(['/home']);
+    try {
+      const response = await firstValueFrom(this.tmdbService.searchMovies(query) as Observable<MovieResponse>);
+      this.movies.set(response.results ?? []);
+    } catch {
+      this.errorMessage.set('Unable to search movies.');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

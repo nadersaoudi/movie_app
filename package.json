@@ -23,7 +23,7 @@
     "@angular/common": "22.2.3",
     "@angular/compiler": "22.2.3",
     "@angular/core": "22.2.3",
-    "@angular/fire": "^21.0.0",
+    "@angular/fire": "22.0.0-rc.0",
     "@angular/forms": "22.2.3",
     "@angular/platform-browser": "22.2.3",
     "@angular/router": "22.2.3",
@@ -36,7 +36,7 @@
     "@capacitor/status-bar": "8.0.4",
     "@ionic/angular": "^9.0.0",
     "@ionic/pwa-elements": "^3.4.0",
-    "firebase": "^13.2.0",
+    "firebase": "12.18.0",
     "ionicons": "^8.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
@@ -59,6 +59,10 @@
     "typescript": "~6.0.0",
     "typescript-eslint": "^8.61.0",
     "vitest": "~5.0.5"
+  },
+  "overrides": {
+    "@firebase/app": "0.16.5",
+    "@firebase/app-compat": "0.5.21"
   },
   "prettier": "@ionic/prettier-config",
   "description": "An Ionic project"

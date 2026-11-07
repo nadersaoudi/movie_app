@@ -1,0 +1,69 @@
+<app-header title="Matches"></app-header>
+
+<ion-content class="ion-padding">
+  @if (!isLoggedIn()) {
+  <div class="empty-state">
+    <ion-icon name="people-outline"></ion-icon>
+    <p>Login to find users who share your taste.</p>
+    <ion-button routerLink="/login">Login</ion-button>
+  </div>
+  } @else if (isLoading()) {
+  <div class="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  } @else if (!hasFavorites()) {
+  <div class="empty-state">
+    <ion-icon name="sparkles-outline"></ion-icon>
+    <p>Add some favorites first — we need them to compute matches.</p>
+    <ion-button routerLink="/movies">Browse Movies</ion-button>
+  </div>
+  } @else if (!matches().length) {
+  <div class="empty-state">
+    <ion-icon name="people-outline"></ion-icon>
+    <p>No matches above {{ thresholdPercent }}% yet. Add more favorites to improve matching.</p>
+  </div>
+  } @else {
+  <p class="hint">Showing users with a match above {{ thresholdPercent }}%.</p>
+
+  @for (match of matches(); track match.user.uid) {
+  <div class="match-card">
+    <div class="match-head">
+      <img class="avatar" [src]="avatar(match.user)" [alt]="match.user.firstName" />
+      <div class="match-user">
+        <h2>{{ match.user.firstName }} {{ match.user.lastName }}</h2>
+        <p>{{ match.user.email }}</p>
+      </div>
+      <div class="match-score">{{ percent(match.score) }}%</div>
+    </div>
+
+    @if (match.sharedMovies.length) {
+    <div class="match-row">
+      <span class="match-label">Movies</span>
+      <div class="chips">
+        @for (title of match.sharedMovies; track title) {
+        <span class="chip">{{ title }}</span>
+        }
+      </div>
+    </div>
+    } @if (match.sharedGenres.length) {
+    <div class="match-row">
+      <span class="match-label">Genres</span>
+      <div class="chips">
+        @for (genre of match.sharedGenres; track genre) {
+        <span class="chip chip-alt">{{ genre }}</span>
+        }
+      </div>
+    </div>
+    } @if (match.sharedActors.length) {
+    <div class="match-row">
+      <span class="match-label">Actors</span>
+      <div class="chips">
+        @for (actor of match.sharedActors; track actor) {
+        <span class="chip chip-alt">{{ actor }}</span>
+        }
+      </div>
+    </div>
+    }
+  </div>
+  } }
+</ion-content>

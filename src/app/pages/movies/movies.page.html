@@ -1,13 +1,42 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>movies</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Movies"></app-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">movies</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-searchbar [(ngModel)]="searchQuery" (ionChange)="onSearch($event)" placeholder="Search movies"></ion-searchbar>
+
+  @if (isAdmin()) {
+  <ion-button expand="block" routerLink="/admin" class="add-movie-button">
+    <ion-icon slot="start" name="add-outline"></ion-icon>
+    Add Movie
+  </ion-button>
+  }
+
+  <h2>All Movies</h2>
+
+  @if (isLoading()) {
+  <div class="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  } @else if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+  } @else if (!items().length) {
+  <p class="empty">No movies found.</p>
+  } @else {
+  <ion-grid>
+    <ion-row>
+      @for (item of items(); track item.routeId) {
+      <ion-col size="6">
+        <a routerLink="/movie/{{ item.routeId }}">
+          <ion-card>
+            <img [src]="item.poster" [alt]="item.title" loading="lazy" decoding="async" />
+            <ion-card-header>
+              <ion-card-title>{{ item.title }}</ion-card-title>
+              <ion-card-subtitle>{{ item.subtitle }}</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
+        </a>
+      </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
+  }
 </ion-content>

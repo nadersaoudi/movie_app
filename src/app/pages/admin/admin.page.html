@@ -1,0 +1,121 @@
+<app-header title="Admin"></app-header>
+
+<ion-content class="ion-padding">
+  @if (!checked()) {
+  <div class="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  } @else if (!isAdmin()) {
+  <div class="empty-state">
+    <ion-icon name="shield-checkmark-outline"></ion-icon>
+    <p>This area is reserved for administrators.</p>
+    <ion-button routerLink="/home">Back to Home</ion-button>
+  </div>
+  } @else {
+  <h2>Add a Movie</h2>
+
+  <div class="admin-form">
+    <ion-input label="Title" labelPlacement="floating" [(ngModel)]="title" placeholder="Movie title"></ion-input>
+    <ion-input
+      label="Release date"
+      labelPlacement="floating"
+      [(ngModel)]="releaseDate"
+      placeholder="YYYY-MM-DD"
+    ></ion-input>
+    <ion-input
+      label="Poster image URL"
+      labelPlacement="floating"
+      [(ngModel)]="posterUrl"
+      placeholder="https://..."
+    ></ion-input>
+    <ion-input
+      label="Rating (0-10)"
+      labelPlacement="floating"
+      type="number"
+      [(ngModel)]="voteAverage"
+      placeholder="7.5"
+    ></ion-input>
+    <ion-input
+      label="Genres (comma separated)"
+      labelPlacement="floating"
+      [(ngModel)]="genresText"
+      placeholder="Action, Drama"
+    ></ion-input>
+    <ion-input
+      label="Actors (comma separated)"
+      labelPlacement="floating"
+      [(ngModel)]="actorsText"
+      placeholder="Tom Hanks, ..."
+    ></ion-input>
+    <ion-textarea
+      label="Overview"
+      labelPlacement="floating"
+      autoGrow="true"
+      rows="3"
+      [(ngModel)]="overview"
+      placeholder="Short description"
+    ></ion-textarea>
+
+    @if (errorMessage()) {
+    <div class="error-message">{{ errorMessage() }}</div>
+    } @if (message()) {
+    <div class="success-message">{{ message() }}</div>
+    }
+
+    <ion-button expand="block" (click)="addMovie()" [disabled]="isSaving()">
+      <ion-icon slot="start" name="add-outline"></ion-icon>
+      {{ isSaving() ? 'Saving...' : 'Add Movie' }}
+    </ion-button>
+  </div>
+
+  <h2>Our Movies</h2>
+
+  @if (!movies().length) {
+  <p class="empty">No movies added yet.</p>
+  } @else {
+  <ion-list lines="none" class="user-list">
+    @for (movie of movies(); track movie.id) {
+    <ion-item class="user-item">
+      <ion-icon slot="start" name="film-outline"></ion-icon>
+      <ion-label>
+        <h2>{{ movie.title }}</h2>
+        <p>{{ movie.release_date || 'No date' }}</p>
+      </ion-label>
+      <ion-button slot="end" fill="clear" color="danger" (click)="deleteMovie(movie)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+    }
+  </ion-list>
+  }
+
+  <h2>Manage Users</h2>
+
+  @if (!users().length) {
+  <p class="empty">No users found.</p>
+  } @else {
+  <ion-list lines="none" class="user-list">
+    @for (user of users(); track user.uid) {
+    <ion-item class="user-item">
+      <ion-icon slot="start" name="person-outline"></ion-icon>
+      <ion-label>
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+        <p>{{ user.email }}</p>
+      </ion-label>
+      <ion-badge slot="end" [color]="user.status === 'active' ? 'success' : 'danger'"> {{ user.status }} </ion-badge>
+      <ion-button
+        slot="end"
+        fill="clear"
+        [color]="user.status === 'active' ? 'danger' : 'success'"
+        (click)="toggleStatus(user)"
+      >
+        <ion-icon
+          slot="icon-only"
+          [name]="user.status === 'active' ? 'lock-closed-outline' : 'lock-open-outline'"
+        ></ion-icon>
+      </ion-button>
+    </ion-item>
+    }
+  </ion-list>
+  } }
+</ion-content>

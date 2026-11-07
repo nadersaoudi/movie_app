@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>{{ title() }}</ion-title>
+
+    <ion-buttons slot="end">
+      @if (user(); as currentUser) {
+        <ion-button [id]="menuId" fill="clear">
+          @if (currentUser.photoUrl) {
+            <img [src]="currentUser.photoUrl" alt="Profile" class="profile-avatar" />
+          } @else {
+            <ion-icon slot="icon-only" name="person-outline" size="large"></ion-icon>
+          }
+        </ion-button>
+
+        <ion-popover [trigger]="menuId" [isOpen]="isProfileMenuOpen()" (didDismiss)="isProfileMenuOpen.set(false)">
+          <ng-template>
+            <ion-content class="profile-popover">
+              <p class="profile-name">{{ currentUser.displayName }}</p>
+              <ion-button expand="block" color="danger" (click)="logout()">Logout</ion-button>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
+      } @else {
+        <ion-button routerLink="/login" fill="clear">
+          <ion-icon slot="icon-only" name="person-outline" size="large"></ion-icon>
+        </ion-button>
+      }
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

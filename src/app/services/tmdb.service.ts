@@ -39,6 +39,7 @@ export class TmdbService {
   getMovieDetails(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/movie/${id}`, {
       headers: this.headers,
+      params: { append_to_response: 'credits' },
     });
   }
 }

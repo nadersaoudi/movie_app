@@ -19,6 +19,17 @@ export interface Genre {
   name: string;
 }
 
+export interface CastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+}
+
+export interface MovieCredits {
+  cast: CastMember[];
+}
+
 export interface MovieDetail extends Movie {
   genres: Genre[];
   runtime: number;
@@ -31,6 +42,7 @@ export interface MovieDetail extends Movie {
   original_language: string;
   original_title: string;
   homepage: string | null;
+  credits?: MovieCredits;
   production_companies: {
     id: number;
     name: string;
@@ -46,4 +58,28 @@ export interface MovieDetail extends Movie {
     iso_639_1: string;
     name: string;
   }[];
+}
+
+export interface FavoriteMovie {
+  movieId: string;
+  title: string;
+  poster_path: string | null;
+  release_date: string;
+  vote_average: number;
+  genres: string[];
+  actors: string[];
+  createdAt: number;
+}
+
+export interface CustomMovie {
+  id: string;
+  title: string;
+  overview: string;
+  poster_path: string | null;
+  release_date: string;
+  vote_average: number;
+  genres: string[];
+  actors: string[];
+  createdBy: string;
+  createdAt: number;
 }

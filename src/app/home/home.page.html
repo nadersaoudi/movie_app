@@ -1,32 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      @if (currentUser(); as user) {
-      <ion-button id="profile-menu" fill="clear">
-        @if (user.photoUrl) {
-        <img [src]="user.photoUrl" alt="Profile" class="profile-avatar" />
-        } @else {
-        <ion-icon slot="icon-only" name="person-outline" size="large"></ion-icon>
-        }
-      </ion-button>
-
-      <ion-popover trigger="profile-menu" [isOpen]="isProfileMenuOpen()" (didDismiss)="isProfileMenuOpen.set(false)">
-        <ng-template>
-          <ion-content class="ion-padding">
-            <p>{{ user.firstName }} {{ user.lastName }}</p>
-            <ion-button expand="block" color="danger" (click)="logout()"> Logout </ion-button>
-          </ion-content>
-        </ng-template>
-      </ion-popover>
-      } @else {
-      <ion-button routerLink="/login" fill="clear">
-        <ion-icon slot="icon-only" name="person-outline" size="large"></ion-icon>
-      </ion-button>
-      }
-    </ion-buttons>
-    <ion-title>MovieApp</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header title="MovieApp"></app-header>
 
 <ion-content class="ion-padding">
   <ion-searchbar [(ngModel)]="searchQuery" (ionChange)="onSearch($event)" placeholder="Search movies"></ion-searchbar>
@@ -49,7 +21,12 @@
       <ion-col size="6">
         <a routerLink="/movie/{{ movie.id }}">
           <ion-card>
-            <img [src]="imageUrl + movie.poster_path" [alt]="movie.title" />
+            <img
+              [src]="movie.poster_path ? imageUrl + movie.poster_path : noImage"
+              [alt]="movie.title"
+              loading="lazy"
+              decoding="async"
+            />
 
             <ion-card-header>
               <ion-card-title>{{ movie.title }}</ion-card-title>

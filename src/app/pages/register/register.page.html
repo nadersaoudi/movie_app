@@ -5,8 +5,8 @@
       <p>Join MovieApp and discover your favorite movies</p>
     </div>
 
-    @if (errorMessage) {
-    <div class="error-message">{{ errorMessage }}</div>
+    @if (errorMessage()) {
+    <div class="error-message">{{ errorMessage() }}</div>
     }
 
     <div class="register-form">
@@ -63,13 +63,13 @@
           Choose from Gallery
         </ion-button>
 
-        @if (photo) {
-        <img [src]="photo" alt="Profile photo" class="profile-preview" />
+        @if (photo()) {
+        <img [src]="photo()" alt="Profile photo" class="profile-preview" />
         }
       </div>
 
-      <ion-button expand="block" (click)="register()" [disabled]="isLoading">
-        {{ isLoading ? "Creating account..." : "Create Account" }}
+      <ion-button expand="block" (click)="register()" [disabled]="isLoading()">
+        {{ isLoading() ? "Creating account..." : "Create Account" }}
       </ion-button>
 
       <div class="login-link">

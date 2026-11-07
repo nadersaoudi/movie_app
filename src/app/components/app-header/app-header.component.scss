@@ -1,0 +1,17 @@
+.profile-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.profile-popover {
+  --padding-start: 16px;
+  --padding-end: 16px;
+
+  .profile-name {
+    font-weight: 700;
+    margin: 0 0 12px;
+  }
+}

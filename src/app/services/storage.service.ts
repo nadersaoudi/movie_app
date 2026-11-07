@@ -1,9 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Storage, ref, uploadString, getDownloadURL } from '@angular/fire/storage';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class StorageService {
   private readonly storage = inject(Storage);
 

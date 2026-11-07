@@ -7,5 +7,5 @@ export interface User {
   photoUrl: string;
   role: 'user' | 'admin';
   status: 'active' | 'disabled';
-  createdAt: Date;
+  createdAt: number;
 }
